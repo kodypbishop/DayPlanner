@@ -1,24 +1,39 @@
 window.onload = function () {
-    if (localStorage.getItem("planner") !== null) {
+    let today = moment().format("MMM Do YY"); 
+    if (localStorage.getItem(today) !== null) {
         for (let i = 0; i <= 8; i++) {
             let hour = i + 9;
-            console.log(hour)
-            $("#hour" + hour).val(JSON.parse(localStorage.planner)[i])
-            console.log()
+            console.log(today)
+            $("#hour" + hour).val(JSON.parse(localStorage.getItem(today))[i])
         }
     }
-    let hour = moment().format('HH');
-    $("#hour" + hour).attr("class", "present form-control col-sm-10")
-    for (let i = 9; i < hour || i > 18; i++) {
-        $("#hour" + i).attr("class", "past form-control col-sm-10")
+    let time = moment().format('HH');
+    function currentHour() {
+        // let time = 4;
+        if (time < 18 && time > 8) {
+            $("#hour" + time).attr("class", "present form-control col-sm-10")
+        }
+        console.log(time)
+        for (let i = 9; i < 18; i++) {
+            if (i < time) {
+                $("#hour" + i).attr("class", "past form-control col-sm-10")
+            }
+        };
+        for (let i = 17; i > 8; i--) {
+            if (i > time) {
+                $("#hour" + i).attr("class", "future form-control col-sm-10");
+            }
+        };
     }
-    for (let i = 17; i > hour || i < 8; i--) {
-        $("#hour" + i).attr("class", "future form-control col-sm-10")
-    }
-
+    currentHour();
 
     let interval = setInterval(function () {
         $("#currentDay").text(moment().format('MMMM Do YYYY, h:mm:ss a'));
+        let hour = moment().format('HH');
+        if (hour != time){
+            time = hour
+        currentHour();
+        }
     }, 1000);
 
     $("button").on("click", function () {
@@ -27,6 +42,6 @@ window.onload = function () {
             planner.push($("#hour" + i).val());
             console.log(planner);
         }
-        localStorage.setItem("planner", JSON.stringify(planner))
+        localStorage.setItem(moment().format("MMM Do YY") , JSON.stringify(planner))
     })
 }
