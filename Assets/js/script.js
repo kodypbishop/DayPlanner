@@ -9,8 +9,12 @@ window.onload = function () {
     }
     let time = moment().format('HH');
     function currentHour() {
-        // let time = 4;
-        if (time < 18 && time > 8) {
+        console.log(time);
+        if (time < 18 && time > 8 || time == 09 ) {
+            if(time == 09){
+                time =9
+                console.log(time);
+            }
             $("#hour" + time).attr("class", "present form-control col-sm-10")
         }
         console.log(time)
@@ -29,11 +33,6 @@ window.onload = function () {
 
     let interval = setInterval(function () {
         $("#currentDay").text(moment().format('MMMM Do YYYY, h:mm:ss a'));
-        let hour = moment().format('HH');
-        if (hour != time){
-            time = hour
-        currentHour();
-        }
     }, 1000);
 
     $("button").on("click", function () {
